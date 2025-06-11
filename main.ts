@@ -334,8 +334,10 @@ controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
     Right = false
 })
 sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Projectile, function (sprite, otherSprite) {
-    sprites.destroy(sprite)
-    info.changeScoreBy(1)
+    if (!(sprite == Monster)) {
+        sprites.destroy(sprite)
+        info.changeScoreBy(1)
+    }
 })
 function Make_enemies () {
     for (let value of tiles.getTilesByType(assets.tile`myTile5`)) {
@@ -528,7 +530,7 @@ scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile16`, function (sprite5,
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite12, otherSprite) {
     if (otherSprite == Monster) {
-        pause(1500)
+        pause(200)
     } else {
         sprites.destroy(otherSprite)
     }
@@ -822,7 +824,7 @@ function Level () {
     tiles.placeOnRandomTile(Character, assets.tile`myTile0`)
     Yspeed = 0
 }
-// Stare so you can buy powers and a level 
+// Stare so you can buy powers and a level
 controller.menu.onEvent(ControllerButtonEvent.Pressed, function () {
     while (true) {
         Paused_countdowns = info.countdown()
