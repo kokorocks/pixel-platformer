@@ -337,10 +337,6 @@ sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Projectile, function (sprite, oth
     if (!(sprite == Monster)) {
         sprites.destroy(sprite)
         info.changeScoreBy(1)
-    } else {
-        sprite.follow(Character, 0)
-        pause(500)
-        sprite.follow(Character, 100)
     }
 })
 function Make_enemies () {
@@ -486,7 +482,8 @@ scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile4`, function (sprite4, 
 })
 info.onCountdownEnd(function () {
     info.startCountdown(450)
-    info.changeLifeBy(-3)
+    game.setGameOverMessage(true, "GAME OVER! time ran out, you must restart the game from the beginning")
+    blockSettings.writeNumber("Level", 0)
 })
 function placeorb () {
     orb = sprites.create(img`
@@ -830,8 +827,8 @@ function Level () {
 }
 // Stare so you can buy powers and a level
 controller.menu.onEvent(ControllerButtonEvent.Pressed, function () {
+    Paused_countdowns = info.countdown()
     while (true) {
-        Paused_countdowns = info.countdown()
         info.stopCountdown()
         story.showPlayerChoices("Power", "Level", "Cancel")
         if (story.checkLastAnswer("Power")) {
@@ -860,8 +857,8 @@ controller.menu.onEvent(ControllerButtonEvent.Pressed, function () {
         } else {
             break;
         }
-        info.startCountdown(Paused_countdowns)
     }
+    info.startCountdown(Paused_countdowns)
 })
 function End () {
     game.gameOver(true)
@@ -883,14 +880,6 @@ scene.onHitWall(SpriteKind.Projectile, function (sprite, location) {
 scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile27`, function (sprite, location) {
     tiles.setTileAt(location, assets.tile`transparency16`)
     info.changeScoreBy(1)
-})
-sprites.onDestroyed(SpriteKind.Enemy, function (sprite) {
-    if (sprite == Monster) {
-        for (let value of tiles.getTilesByType(sprites.dungeon.collectibleInsignia)) {
-            tiles.setTileAt(value, assets.tile`myTile32`)
-            tiles.setWallAt(value, false)
-        }
-    }
 })
 scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile28`, function (sprite4, location4) {
     if (Checkpoint) {
