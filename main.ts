@@ -337,6 +337,11 @@ sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Projectile, function (sprite, oth
     if (!(sprite == Monster)) {
         sprites.destroy(sprite)
         info.changeScoreBy(1)
+    } else {
+        sprite.follow(Character)
+        sprite.startEffect(effects.rings)
+        pause(500)
+        sprite.follow(Character)
     }
 })
 function Make_enemies () {
@@ -932,6 +937,10 @@ scene.onOverlapTile(SpriteKind.Enemy, assets.tile`myTile4`, function (sprite, lo
         for (let value of tiles.getTilesByType(assets.tile`myTile4`)) {
             tiles.setTileAt(value, assets.tile`myTile6`)
             tiles.setWallAt(value, true)
+        }
+        for (let value of tiles.getTilesByType(sprites.dungeon.collectibleInsignia)) {
+            tiles.setTileAt(value, assets.tile`myTile32`)
+            tiles.setWallAt(value, false)
         }
     }
 })
